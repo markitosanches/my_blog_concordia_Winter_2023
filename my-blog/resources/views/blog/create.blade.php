@@ -26,6 +26,15 @@
                                     <label for="message">Message</label>
                                     <textarea class="form-control" id="message" name="body"></textarea>
                                 </div>
+                                <div class="col-12">
+                                    <label for="category">Category</label>
+                                    <select name="categories_id" id="category" class="form-control">
+                                        <option value="">Select the category</option>
+                                        @foreach($categories as $category)
+                                            <option value="{{ $category->id }}">{{ $category->category }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                         </div>
                         <div class="card-footer">
                             <input type="submit" class="btn btn-success">

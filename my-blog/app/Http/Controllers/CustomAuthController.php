@@ -115,14 +115,20 @@ class CustomAuthController extends Controller
         $user = Auth::getProvider()->retrieveByCredentials($credentials);
         Auth::login($user, $request->get('remember'));
 
-        return redirect()->intended('dashboard');
+        return redirect()->intended('blog');
     }
     public function dashboard(){
-        $name = "Guest";
+       /* $name = "Guest";
         if(Auth::check()){
             $name = Auth::user()->name;
         }
-        return view('blog.dashboard', ['name' => $name]);
+        */
+        $users = User::select('name', 'email', 'created_at')
+                    ->OrderBy('name')
+                    ->paginate(5);
+
+        //return $users;
+        return view('blog.dashboard', ['users' => $users]);
     }
     public function logout(){
         Session::flush();

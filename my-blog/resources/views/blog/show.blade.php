@@ -12,7 +12,10 @@
                 <p>
                     {{ $blogPost->body }}
                 </p>
-                <strong>Author: {{$blogPost->blogHasUser->name}}</strong>
+                <p>
+                <strong>Category:</strong> @isset($blogPost->blogHasCategory) {{$blogPost->blogHasCategory->category}} @endisset
+                </p>
+                <strong>Author:</strong> {{$blogPost->blogHasUser->name}}
                 <hr>           
             </div>
         </div>

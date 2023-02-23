@@ -1,23 +1,29 @@
 @extends('layouts.app')
 @section('content')
-<nav class="navbar navbar-expand-lg bg-light">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">Hello {{ $name }}</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-            @guest    
-                <a class="nav-link" href="{{route('user.registration')}}">Registration
-                </a>
-                <a class="nav-link" href="{{route('login')}}">Login</a>
-            @else
-                <a class="nav-link" href="{{route('blog.index')}}">Blogs</a>
-                <a class="nav-link" href="{{route('logout')}}">Logout</a>
-            @endguest
+    <div class="container">
+        <h1 class="display-5">User List</h1>
+        <div class="card mt-3">
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Created</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($users as $user)
+                            <tr>
+                                <td>{{$user->name}}</td>
+                                <td>{{$user->email}}</td>
+                                <td>{{$user->created_at}}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                {{ $users }}
             </div>
         </div>
     </div>
-</nav>
 @endsection
