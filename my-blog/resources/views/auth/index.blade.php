@@ -43,6 +43,7 @@
                                 <input type="submit" value="Login" class="btn btn-dark btn-block">
                             </div>
                         </form>
+                        <p><a href="{{route('forgot.password')}}">Forgot Password</a></p>
                     </div>
                 </div>
             </div>

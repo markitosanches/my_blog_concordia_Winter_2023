@@ -6,7 +6,9 @@ use App\Models\user;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Str;
 
 class CustomAuthController extends Controller
 {
@@ -48,6 +50,16 @@ class CustomAuthController extends Controller
         $user->fill($request->all());
         $user->password = Hash::make($request->password);
         $user->save();
+
+        $to_name  = $request->name;
+        $to_email = $request->email;
+        $body = "<a href='http://www.google.com'>Click here to confirm your account</a>";
+
+        Mail::send('email.mail', ['name' => $to_name, 'body' => $body],
+        function($message) use ($to_name, $to_email){
+            $message->to($to_email, $to_name)->subject('Laravel Email Test');
+        }
+    );
 
         return redirect()->back()->withSuccess('User recorded !');
 
@@ -134,5 +146,57 @@ class CustomAuthController extends Controller
         Session::flush();
         Auth::logout();
         return redirect(route('login'));
+    }
+
+    public function forgotPassword(){
+        return view('auth.forgot-password');
+    }
+
+    public function tempPassword(Request $request){
+       $request->validate([
+            'email' => 'required|email|exists:users'
+       ]);
+
+       $user = User::where('email', $request->email)->first();
+      // $user = $user[0];
+       $userId = $user->id;
+       $tempPassword = str::random(25);
+       $user->temp_password =  $tempPassword;
+       $user->save();
+
+       $to_name  = $user->name;
+       $to_email = $request->email;
+       $body = "<a href='".route('new.password', [$userId, $tempPassword])."'>Click here to reset your password</a>";
+
+
+       Mail::send('email.mail', ['name' => $to_name, 'body' => $body],
+       function($message) use ($to_name, $to_email){
+           $message->to($to_email, $to_name)->subject('Reset Password');
+       }
+   );
+
+       return redirect()->back()->withSuccess("Please check your email account!");
+
+        // return $request->email;
+    }
+
+    public function newPassword(User $user, $tempPassword){
+        if ($user->temp_password === $tempPassword){
+            return view('auth.new-password');
+        }
+        return redirect(route('forgot.password'))->withErrors('Credentials does not match!');
+    }
+
+    public function storeNewPassword(User $user, $tempPassword, Request $request){
+        if ($user->temp_password === $tempPassword){
+            $request->validate([
+                'password' => 'required|min:6|max:20|confirmed'
+            ]);
+            $user->password = Hash::make($request->password);
+            $user->temp_password = NULL;
+            $user->save();
+            return redirect(route('login'))->withSuccess('Password Changed with Success !');
+        }
+        return redirect(route('forgot.password'))->withErrors('Credentials does not match!');
     }
 }

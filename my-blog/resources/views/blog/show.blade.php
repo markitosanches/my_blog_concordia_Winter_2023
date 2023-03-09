@@ -13,23 +13,25 @@
                     {{ $blogPost->body }}
                 </p>
                 <p>
-                <strong>Category:</strong> @isset($blogPost->blogHasCategory) {{$blogPost->blogHasCategory->category}} @endisset
+                <strong>Category:</strong> {{$blogPost->blogHasCategory?->category}} 
                 </p>
                 <strong>Author:</strong> {{$blogPost->blogHasUser->name}}
                 <hr>           
             </div>
         </div>
-        <div class="row">
-            <div class="col-6">
+        <div class="row justify-content-center">
+            <div class="col-4">
+                <a href="{{ route('blog.pdf', $blogPost->id)}}" class="btn btn-warning">PDF</a>
+            </div>
+            <div class="col-4">
                 <a href="{{ route('blog.edit', $blogPost->id)}}" class="btn btn-primary">Update</a>
             </div>
-            <div class="col-6">
+            <div class="col-4">
                 <form  method="post">
                     @csrf
                     @method('delete')
                     <input type="submit" class="btn btn-danger" value="Delete">
                 </form>
-                
             </div>
         </div>
     </div>

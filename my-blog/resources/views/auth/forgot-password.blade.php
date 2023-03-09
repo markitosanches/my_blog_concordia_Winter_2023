@@ -6,24 +6,23 @@
             <div class="col-md-4 pt-4">
                 <div class="card">
                     <h3 class="card-header text-center">
-                       @lang('lang.new_user')
+                       Forgot Password
                     </h3>
                     <div class="card-body">
                         @if(session('success'))
                             <div class="alert alert-success">
                                 {{ session('success')}}
                             </div>
+                        @endif 
+                        @if(!$errors->isEmpty())
+                            <ul>
+                                @foreach($errors->all() as $error)
+                                    <li class="text-danger">{{$error}}</li>
+                                @endforeach
+                            </ul>
                         @endif    
-                        <form action="{{ route('user.store')}}" method="post">
+                        <form action="{{ route('temp.password')}}" method="post">
                             @csrf
-                            <div class="form-group mb-3">
-                                <input type="text" placeholder="@lang('lang.name')" class="form-control" name="name" value="{{old('name')}}">
-                                @if ($errors->has('name'))
-                                    <div class="text-danger mt-2">
-                                        {{$errors->first('name')}}
-                                    </div>
-                                @endif
-                            </div>
                             <div class="form-group mb-3">
                                 <input type="email" placeholder="@lang('lang.email')" class="form-control" name="email" value="{{old('email')}}">
                                 @if ($errors->has('email'))
@@ -32,16 +31,8 @@
                                     </div>
                                 @endif
                             </div>
-                            <div class="form-group mb-3">
-                                <input type="password" placeholder="@lang('lang.password')" class="form-control" name="password">
-                                @if ($errors->has('password'))
-                                    <div class="text-danger mt-2">
-                                        {{$errors->first('password')}}
-                                    </div>
-                                @endif
-                            </div>
                             <div class="d-grid mx-auto">
-                                <input type="submit" value="@lang('lang.save')" class="btn btn-dark btn-block">
+                                <input type="submit" value="Forgot Password" class="btn btn-dark btn-block">
                             </div>
                         </form>
                     </div>
