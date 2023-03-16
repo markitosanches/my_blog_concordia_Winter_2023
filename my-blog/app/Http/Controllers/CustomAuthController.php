@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class CustomAuthController extends Controller
 {
@@ -126,6 +128,17 @@ class CustomAuthController extends Controller
         
         $user = Auth::getProvider()->retrieveByCredentials($credentials);
         Auth::login($user, $request->get('remember'));
+        //$user->assignRole('Admin');
+        //$user->removeRole('Admin');
+        //$user->assignRole('Admin');
+        //$role = Role::findByName('Admin');
+        //$role->givePermissionTo(['create-users', 'edit-users', 'delete-users']);
+
+         if($user->role == 1){
+            $user->assignRole('Admin');
+         }elseif($user->role == 2){
+            $user->assignRole('Editor');
+         }
 
         return redirect()->intended('blog');
     }

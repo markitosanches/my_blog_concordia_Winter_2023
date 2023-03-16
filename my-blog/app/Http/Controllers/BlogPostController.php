@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\BlogPost;
 use App\Models\Category;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use PDF;
-//use Barryvdh\DomPDF\Facade as PDF;
+//use PDF;
+use Barryvdh\DomPDF\Facade as PDF;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class BlogPostController extends Controller
 {
@@ -67,7 +70,14 @@ class BlogPostController extends Controller
      */
     public function show(BlogPost $blogPost)
     {
-        //SELECT * FROM blog_posts WHERE ID = $blogPost,
+
+        $user = User::find(Auth()->user()->id);
+        if( $user->id === $blogPost->user_id){
+            $user->assignRole('Editor');
+        }else{
+            $user->removeRole('Editor');
+            $user->removeRole('Admin');
+        }
         return view('blog.show', ['blogPost' => $blogPost]);
     }
 

@@ -36,7 +36,7 @@ use App\Http\Controllers\LocalizationController;
 
 Route::get('login', [CustomAuthController::class, 'index'])->name('login');
 Route::post('login', [CustomAuthController::class, 'authentication'])->name('authentication');
-Route::get('registration', [CustomAuthController::class, 'create'])->name('user.registration');
+Route::get('registration', [CustomAuthController::class, 'create'])->name('user.registration')->middleware('can:create-users');
 Route::post('registration', [CustomAuthController::class, 'store'])->name('user.store');
 Route::get('dashboard', [CustomAuthController::class, 'dashboard'])->name('dashboard')->middleware('auth');
 Route::get('logout', [CustomAuthController::class, 'logout'])->name('logout');

@@ -24,14 +24,18 @@
                 <a href="{{ route('blog.pdf', $blogPost->id)}}" class="btn btn-warning">PDF</a>
             </div>
             <div class="col-4">
+            @can('edit-blog-posts')
                 <a href="{{ route('blog.edit', $blogPost->id)}}" class="btn btn-primary">Update</a>
+            @endcan
             </div>
             <div class="col-4">
+            @can('delete-blog-posts')
                 <form  method="post">
                     @csrf
                     @method('delete')
                     <input type="submit" class="btn btn-danger" value="Delete">
                 </form>
+            @endcan
             </div>
         </div>
     </div>
